@@ -1,5 +1,7 @@
 FROM debian:jessie
 
+ENV NVM_VERSION v0.13.1
+
 ### Create development user ###
 RUN useradd -m sailor -s /bin/bash
 
@@ -11,17 +13,21 @@ RUN apt-get update && \
 USER sailor
 
 ### Fetch nvm package ###
-RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.13.1/install.sh | bash
+RUN curl https://raw.githubusercontent.com/creationix/nvm/$NVM_VERSION/install.sh | bash
 
 ### Install node default version ###
 ENV NVM_DIR /home/sailor/.nvm
+ENV NODE_VERSION 0.10.31
 
-RUN . /home/sailor/.bashrc && \
-    . /home/sailor/.nvm/nvm.sh && \
-    nvm install v0.10.31 && \
-    nvm alias default 0.10.31
+RUN . $NVM_DIR/nvm.sh && \
+    nvm install v$NODE_VERSION && \
+    nvm alias default $NODE_VERSION && \
+    nvm use default
 
-ENV PATH /home/sailor/.nvm/v0.10.31/bin/node:/home/sailor/.nvm:$PATH
+ENV NODE_PATH $NVM_DIR/v$NODE_VERSION/lib/node_modules
+
+ENV PATH $NVM_DIR/v$NODE_VERSION/bin:$NVM_DIR:$PATH
 
 WORKDIR /home/sailor/
+
 CMD tail -f /var/log/lastlog

@@ -17,7 +17,7 @@ RUN curl https://raw.githubusercontent.com/creationix/nvm/$NVM_VERSION/install.s
 
 ### Install node default version ###
 ENV NVM_DIR /home/sailor/.nvm
-ENV NODE_VERSION 0.10.31
+ENV NODE_VERSION 6.9.1
 
 RUN . $NVM_DIR/nvm.sh && \
     nvm install v$NODE_VERSION && \
